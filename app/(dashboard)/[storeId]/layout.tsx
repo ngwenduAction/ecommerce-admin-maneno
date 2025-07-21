@@ -1,5 +1,5 @@
 // This is going to check for authentication & for the existing store
-import { auth } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
 import prismadb from "@/lib/prismadb";
@@ -12,19 +12,26 @@ export default async function DashboardLayout({
   children: React.ReactNode;
   params: { storeId: string };
 }) {
-  const { userId } = auth();
+  // Destructure and await params
+  const { storeId } = await params;
 
+  // Fetch the authenticated user's ID
+  const { userId } = await auth();
+
+  // If no user ID, redirect to sign-in
   if (!userId) {
     redirect("/sign-in");
   }
 
+  // Fetch the store for the given user and store ID
   const store = await prismadb.store.findFirst({
     where: {
-      id: params.storeId,
+      id: storeId,
       userId,
     },
   });
 
+  // If no store is found, redirect to home
   if (!store) {
     redirect("/");
   }

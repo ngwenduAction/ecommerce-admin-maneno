@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 
 import prismadb from "@/lib/prismadb";
 
@@ -9,7 +9,7 @@ export async function POST(
     { params }: { params: { storeId: string } }
 ) {
     try {
-        const { userId } = auth();
+        const { userId } = await auth();
         const body = await req.json();
 
         const { name, billboardId } = body;
@@ -58,22 +58,25 @@ export async function POST(
 
 export async function GET(
     req: Request,
-    { params }: { params: { storeId: string } }
+    { params }: { params: { categoryId: string } }
 ) {
     try {
-        if (!params.storeId) {
+        if (!params.categoryId) {
             return new NextResponse("Store id is required", { status: 400 });
         }
         
-        const categories = await prismadb.category.findMany({
+        const category = await prismadb.category.findMany({
             where: {
-                storeId: params.storeId,
+                id: params.categoryId,
             },
+            include: {
+                billboard: true,
+            }
         });
 
-        return NextResponse.json(categories);
+        return NextResponse.json(category);
     } catch (error) {
-        console.log('[CATEGORIES_GET]', error);
+        console.log('[CATEGORY_GET]', error);
         return new NextResponse("Internal error", { status: 500 });
     }
 }
