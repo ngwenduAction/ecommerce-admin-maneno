@@ -14,7 +14,7 @@ interface DashboardPageProps {
   params: { storeId: string };
 }
 
-const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
+export default async function DashboardPage({ params }: DashboardPageProps) {
   // Ensure params are awaited to handle laziness in Next.js App Router
   const { storeId } = await params;
 
@@ -75,6 +75,4 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
       </div>
     </div>
   );
-};
-
-export default DashboardPage;
+}
