@@ -5,8 +5,9 @@ import prismadb from "@/lib/prismadb";
 
 export async function GET(
     req: Request,
-    { params }: { params: { storeId: string; billboardId: string } }
-  ) {
+    props: { params: Promise<{ storeId: string; billboardId: string }> }
+) {
+    const params = await props.params;
     try {
       if (!params.billboardId) {
         return new NextResponse("Billboard id is required", { status: 400 });
@@ -27,12 +28,13 @@ export async function GET(
       console.log("[BILLBOARD_GET]", error);
       return new NextResponse("Internal error", { status: 500 });
     }
-  }  
+}  
 
-export async function PATCH (
+export async function PATCH(
     req: Request,
-    { params }: { params: { storeId: string, billboardId: string } }
+    props: { params: Promise<{ storeId: string, billboardId: string }> }
 ) {
+    const params = await props.params;
     try {
         const { userId } = await auth();
         const body = await req.json();
@@ -83,10 +85,11 @@ export async function PATCH (
     }
 };
 
-export async function DELETE (
+export async function DELETE(
     req: Request,
-    { params }: { params: { storeId: string, billboardId: string } }
+    props: { params: Promise<{ storeId: string, billboardId: string }> }
 ) {
+    const params = await props.params;
     try {
         const { userId } = await auth();
 

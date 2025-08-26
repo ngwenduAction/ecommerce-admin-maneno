@@ -4,7 +4,7 @@ import prismadb from "@/lib/prismadb";
 import { CategoryClient } from "./components/client";
 import { CategoryColumn } from "./components/columns";
 
-const CategoriesPage = async (props: { params: { storeId: string } }) => {
+const CategoriesPage = async (props: { params: Promise<{ storeId: string }> }) => {
   const params = await props.params;
   const storeId = params.storeId;
 

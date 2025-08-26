@@ -4,10 +4,8 @@ import { auth } from "@clerk/nextjs/server";
 import prismadb from "@/lib/prismadb";
 
 
-export async function POST(
-    req: Request,
-    { params }: { params: { storeId: string } }
-) {
+export async function POST(req: Request, props: { params: Promise<{ storeId: string }> }) {
+    const params = await props.params;
     try {
         const { userId } = await auth();
         const body = await req.json();
@@ -56,10 +54,8 @@ export async function POST(
     }
 }
 
-export async function GET(
-    req: Request,
-    { params }: { params: { storeId: string } }
-) {
+export async function GET(req: Request, props: { params: Promise<{ storeId: string }> }) {
+    const params = await props.params;
     try {
         if (!params.storeId) {
             return new NextResponse("Store id is required", { status: 400 });
