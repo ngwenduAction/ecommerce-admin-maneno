@@ -16,7 +16,7 @@ interface DashboardPageProps {
 
 export default async function DashboardPage({ params }: DashboardPageProps) {
   // Ensure params are awaited to handle laziness in Next.js App Router
-  const { storeId } = await params;
+  const { storeId } = params;
 
   // Fetch data
   const totalRevenue = await getTotalRevenue(storeId);
