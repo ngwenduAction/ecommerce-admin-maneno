@@ -4,14 +4,14 @@ import prismadb from "@/lib/prismadb";
 
 export async function POST(
     req: Request,
-    { params }: { params: Promise<{ storeId: string }> }
+    { params }: { params: { storeId: string } }
 ) {
     try {
         const { userId } = await auth();
         const body = await req.json();
 
         const { name, billboardId } = body; 
-        const { storeId } = await params; 
+        const { storeId } = params; 
 
         if (!userId) {
             return new NextResponse("Unauthenticated", { status: 401 });
@@ -58,10 +58,10 @@ export async function POST(
 
 export async function GET(
     req: Request,
-    { params }: { params: Promise<{ storeId: string }> }
+    { params }: { params: { storeId: string } }
 ) {
     try {
-        const { storeId } = await params; 
+        const { storeId } = params; 
 
         if (!storeId) {
             return new NextResponse("Store Id is required", { status: 400});
