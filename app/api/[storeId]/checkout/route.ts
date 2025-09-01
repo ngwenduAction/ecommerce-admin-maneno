@@ -14,8 +14,8 @@ export async function OPTIONS() {
     return NextResponse.json({}, { headers:corsHeaders });
 }
 
-export async function POST(req: Request, props: { params: Promise<{ storeId: string }> }) {
-    const params = await props.params;
+export async function POST(req: Request, { params }: { params: { storeId: string } }) {
+    //  const { storeId } = await params; ;
     // check if we have productIds
     const { productIds } = await req.json();
 

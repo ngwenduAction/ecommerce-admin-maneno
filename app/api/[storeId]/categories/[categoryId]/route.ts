@@ -3,16 +3,16 @@ import { NextResponse } from "next/server";
 
 import prismadb from "@/lib/prismadb";
 
-export async function GET(req: Request, props: { params: Promise<{ categoryId: string }> }) {
-    const params = await props.params;
+export async function GET(req: Request, { params }: { params: Promise<{ categoryId: string }> }) {
     try {
-        if (!params.categoryId) {
+        const { categoryId } = await params;
+        if (!categoryId) {
             return new NextResponse("Category id is required", { status: 400 });
         }
 
         const category = await prismadb.category.findUnique({
             where: {
-                id: params.categoryId,
+                id: categoryId,
             },
             include: {
                 billboard: true,
